@@ -1,11 +1,31 @@
 local notif = {}
 local activeNotifications = {}
 
+local Holder = Instance.new("Frame")
+local UIListLayout = Instance.new("UIListLayout")
+local UIPadding = Instance.new("UIPadding")
 local Notification = Instance.new("ScreenGui")
+
 Notification.Name = "Notification"
 Notification.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 Notification.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 Notification.ResetOnSpawn = false
+
+Holder.Name = "Holder"
+Holder.Parent = Notification
+Holder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Holder.BackgroundTransparency = 0.200
+Holder.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Holder.BorderSizePixel = 0
+Holder.Position = UDim2.new(0.615384638, 0, 0, 0)
+Holder.Size = UDim2.new(0, 264, 0, 400)
+
+UIListLayout.Parent = Holder
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
+UIListLayout.Padding = UDim.new(0, 15)
+
+UIPadding.Parent = Holder
 
 function notif:CreateDismissal(title: string, description: string, clock: int)
     local Frame = Instance.new("Frame")
@@ -109,7 +129,12 @@ function notif:CreateDismissal(title: string, description: string, clock: int)
     Frame:TweenPosition(UDim2.new(0.7, 0, 0.7, 0), "Out", "Quad", 0.5, true)
 
     local startTime = clock or 5
-    game:GetService("TweenService"):Create(Timer, TweenInfo.new(startTime), {Size = UDim2.new(0, 0, 0, 5)}):Play()
+    local tween = game:GetService("TweenService"):Create(
+        Timer,
+        TweenInfo.new(startTime),
+        {Size = UDim2.new(0, 0, 0, 5), Position = UDim2.new(0.5, 0, Timer.Position.Y.Scale, 0)}
+    )
+    tween:Play()
 
     task.delay(startTime, function()
         if Frame.Parent then
@@ -119,7 +144,6 @@ function notif:CreateDismissal(title: string, description: string, clock: int)
                 self:UpdateNotificationPositions()
             end
         
-            -- Tween out and remove
             Frame:TweenPosition(UDim2.new(1, 0, Frame.Position.Y.Scale, 0), "In", "Quad", 0.5, true, function()
                 Frame:Destroy()
             end)
