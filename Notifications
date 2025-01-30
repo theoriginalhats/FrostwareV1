@@ -41,7 +41,7 @@ function notif:CreateDismissal(title: string, description: string, clock: int)
     local UIStroke_1 = Instance.new("UIStroke")
     local UIGradient_2 = Instance.new("UIGradient")
     
-    Frame.Parent = Notification
+    Frame.Parent = Holder
     Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     Frame.BackgroundTransparency = 0.170
     Frame.Position = UDim2.new(0.195063531, 0, 0.379178435, 0)
