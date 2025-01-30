@@ -2,115 +2,124 @@ local notif = {}
 local activeNotifications = {}
 
 local Notification = Instance.new("ScreenGui")
-local Holder = Instance.new("Frame")
-local UIListLayout = Instance.new("UIListLayout")
-local UIPadding = Instance.new("UIPadding")
-
 Notification.Name = "Notification"
 Notification.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 Notification.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 Notification.ResetOnSpawn = false
 
-Holder.Name = "Holder"
-Holder.Parent = Notification
-Holder.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Holder.BackgroundTransparency = 0.2
-Holder.BorderSizePixel = 0
-Holder.Position = UDim2.new(0.615, 0, 0, 0)
-Holder.Size = UDim2.new(0, 264, 0, 400)
-Holder.ClipsDescendants = true
-
-UIListLayout.Parent = Holder
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
-UIListLayout.Padding = UDim.new(0, 10)
-
-UIPadding.Parent = Holder
-UIPadding.PaddingBottom = UDim.new(0, 10)
-
-function notif:CreateDismissal(title, description, duration)
+function notif:CreateDismissal(title: string, description: string, clock: int)
     local Frame = Instance.new("Frame")
     local UICorner = Instance.new("UICorner")
     local UIStroke = Instance.new("UIStroke")
     local Title = Instance.new("TextLabel")
     local Description = Instance.new("TextLabel")
     local TextButton = Instance.new("TextButton")
+    local UICorner_2 = Instance.new("UICorner")
     local Timer = Instance.new("Frame")
-
-    -- Notification UI Setup
-    Frame.Parent = Holder
+    local UIGradient = Instance.new("UIGradient")
+    local UIGradient_1 = Instance.new("UIGradient")
+    local UIStroke_1 = Instance.new("UIStroke")
+    local UIGradient_2 = Instance.new("UIGradient")
+    
+    Frame.Parent = Notification
     Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    Frame.BackgroundTransparency = 0.2
-    Frame.Size = UDim2.new(1, 0, 0, 100)
-
-    UICorner.CornerRadius = UDim.new(0, 4)
-    UICorner.Parent = Frame
-
+    Frame.BackgroundTransparency = 0.170
+    Frame.Position = UDim2.new(0.195063531, 0, 0.379178435, 0)
+    Frame.Size = UDim2.new(0, 262, 0, 132)
+    
     UIStroke.Parent = Frame
     UIStroke.Thickness = 2
     UIStroke.Color = Color3.fromRGB(255, 255, 255)
-
+    
+    UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(32, 16, 255)), ColorSequenceKeypoint.new(0.59, Color3.fromRGB(0, 0, 127)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(17, 43, 127))}
+    UIGradient.Parent = UIStroke
+    
+    UICorner.CornerRadius = UDim.new(0, 4)
+    UICorner.Parent = Frame
+    
+    Title.Name = "Title"
     Title.Parent = Frame
+    Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Title.BackgroundTransparency = 1.000
+    Title.BorderColor3 = Color3.fromRGB(27, 42, 53)
+    Title.Position = UDim2.new(0.0572519079, 0, 0.0530303046, 0)
+    Title.Size = UDim2.new(0, 194, 0, 29)
+    Title.Font = Enum.Font.GothamMedium
     Title.Text = title
-    Title.Size = UDim2.new(1, -10, 0, 30)
-    Title.Position = UDim2.new(0, 5, 0, 5)
     Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.Font = Enum.Font.GothamBold
-    Title.TextSize = 16
-    Title.BackgroundTransparency = 1
-
+    Title.TextSize = 16.000
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    
+    Description.Name = "Description"
     Description.Parent = Frame
-    Description.Text = description
-    Description.Size = UDim2.new(1, -10, 0, 40)
-    Description.Position = UDim2.new(0, 5, 0, 35)
-    Description.TextColor3 = Color3.fromRGB(220, 220, 220)
+    Description.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Description.BackgroundTransparency = 1.000
+    Description.BorderColor3 = Color3.fromRGB(27, 42, 53)
+    Description.Position = UDim2.new(0.0572519079, 0, 0.303030312, 0)
+    Description.Size = UDim2.new(0, 233, 0, 52)
     Description.Font = Enum.Font.Gotham
-    Description.TextSize = 14
+    Description.Text = description
+    Description.TextColor3 = Color3.fromRGB(234, 234, 234)
+    Description.TextSize = 14.000
     Description.TextWrapped = true
-    Description.BackgroundTransparency = 1
-
+    Description.TextXAlignment = Enum.TextXAlignment.Left
+    Description.TextYAlignment = Enum.TextYAlignment.Top
+    
     TextButton.Parent = Frame
-    TextButton.Text = "Dismiss"
-    TextButton.Size = UDim2.new(1, -10, 0, 25)
-    TextButton.Position = UDim2.new(0, 5, 1, -30)
-    TextButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextButton.BackgroundColor3 = Color3.fromRGB(21, 21, 21)
+    TextButton.BorderColor3 = Color3.fromRGB(27, 42, 53)
+    TextButton.Position = UDim2.new(0.0572519079, 0, 0.696969688, 0)
+    TextButton.Size = UDim2.new(0, 233, 0, 29)
     TextButton.Font = Enum.Font.GothamBold
-    TextButton.TextSize = 16
-
-    local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 4)
-    buttonCorner.Parent = TextButton
-
+    TextButton.Text = "Dismiss"
+    TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextButton.TextSize = 16.000
+    TextButton.TextStrokeColor3 = Color3.fromRGB(31, 33, 35)
+    
+    UIStroke_1.Parent = TextButton
+    UIStroke_1.Thickness = 2
+    UIStroke_1.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    UIStroke_1.Color = Color3.fromRGB(255, 255, 255)
+    
+    UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(32, 16, 255)), ColorSequenceKeypoint.new(0.59, Color3.fromRGB(0, 0, 127)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(17, 43, 127))}
+    UIGradient_2.Parent = UIStroke_1
+    
+    UICorner_2.CornerRadius = UDim.new(0, 6)
+    UICorner_2.Parent = TextButton
+    
     Timer.Parent = Frame
-    Timer.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-    Timer.Size = UDim2.new(1, 0, 0, 5)
-    Timer.Position = UDim2.new(0, 0, 1, -5)
-    Timer.ClipsDescendants = true
+    Timer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Timer.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Timer.BorderSizePixel = 0
+    Timer.Position = UDim2.new(0.0572519079, 0, 0.25757575, 0)
+    Timer.Size = UDim2.new(0, 241, 0, 1)
+    
+    UIGradient_1.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(32, 16, 255)), ColorSequenceKeypoint.new(0.59, Color3.fromRGB(0, 0, 127)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(17, 43, 127))}
+    UIGradient_1.Parent = Timer
 
     TextButton.MouseButton1Click:Connect(function()
-        Frame:TweenPosition(UDim2.new(1, 0, Frame.Position.Y.Scale, 0), "In", "Quad", 0.5, true, function()
-            Frame:Destroy()
-        end)
+        Frame:Destroy()
     end)
 
     table.insert(activeNotifications, Frame)
-    self:UpdateNotificationPositions()
+    for i, frame in ipairs(activeNotifications) do
+        local newPosition = UDim2.new(0.7, 0, 0.7 - (i - 1) * 0.15, 0)
+        frame:TweenPosition(newPosition, "Out", "Quad", 0.5, true)
+    end
+    Frame:TweenPosition(UDim2.new(0.7, 0, 0.7, 0), "Out", "Quad", 0.5, true)
 
-    local tween = game:GetService("TweenService"):Create(
-        Timer,
-        TweenInfo.new(duration),
-        { Size = UDim2.new(0, 0, 0, 5) }
-    )
-    tween:Play()
+    local startTime = clock or 5
+    game:GetService("TweenService"):Create(Timer, TweenInfo.new(startTime), {Size = UDim2.new(0, 0, 0, 5)}):Play()
 
-    task.delay(duration, function()
+    task.delay(startTime, function()
         if Frame.Parent then
             local index = table.find(activeNotifications, Frame)
             if index then
                 table.remove(activeNotifications, index)
                 self:UpdateNotificationPositions()
             end
+        
+            -- Tween out and remove
             Frame:TweenPosition(UDim2.new(1, 0, Frame.Position.Y.Scale, 0), "In", "Quad", 0.5, true, function()
                 Frame:Destroy()
             end)
@@ -118,10 +127,135 @@ function notif:CreateDismissal(title, description, duration)
     end)
 end
 
-function notif:UpdateNotificationPositions()
-    for i, frame in ipairs(activeNotifications) do
-        frame.Position = UDim2.new(0, 0, 1 - (i * 0.15), 0)
-    end
+function notif:CreateOptional(title: string, description: string, clock: int, callback)
+    local callback = callback or function() end
+    local Frame = Instance.new("Frame")
+    local UICorner = Instance.new("UICorner")
+    local Title = Instance.new("TextLabel")
+    local UIGradient = Instance.new("UIGradient")
+    local UIStroke = Instance.new("UIStroke")
+    local Description = Instance.new("TextLabel")
+    local Dissmiss = Instance.new("TextButton")
+    local UIStroke_1 = Instance.new("UIStroke")
+    local UICorner_2 = Instance.new("UICorner")
+    local Continue = Instance.new("TextButton")
+    local UIStroke_2 = Instance.new("UIStroke")
+    local UICorner_3 = Instance.new("UICorner")
+    local Timer = Instance.new("Frame")
+    local UIGradient_1 = Instance.new("UIGradient")
+    local UIGradient_2 = Instance.new("UIGradient")
+    local UIGradient_3 = Instance.new("UIGradient")
+    
+    Frame.Parent = Notification
+    Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    Frame.BackgroundTransparency = 0.170
+    Frame.BorderColor3 = Color3.fromRGB(27, 42, 53)
+    Frame.Position = UDim2.new(0.592499375, 0, 0.380960941, 0)
+    Frame.Size = UDim2.new(0, 262, 0, 132)
+    
+    UIStroke.Parent = Frame
+    UIStroke.Thickness = 2
+    UIStroke.Color = Color3.fromRGB(255, 255, 255)
+    
+    UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(32, 16, 255)), ColorSequenceKeypoint.new(0.59, Color3.fromRGB(0, 0, 127)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(17, 43, 127))}
+    UIGradient.Parent = UIStroke
+    
+    UICorner.CornerRadius = UDim.new(0, 4)
+    UICorner.Parent = Frame
+    
+    Title.Name = "Title"
+    Title.Parent = Frame
+    Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Title.BackgroundTransparency = 1.000
+    Title.BorderColor3 = Color3.fromRGB(27, 42, 53)
+    Title.Position = UDim2.new(0.0572519079, 0, 0.0530303046, 0)
+    Title.Size = UDim2.new(0, 194, 0, 29)
+    Title.Font = Enum.Font.GothamMedium
+    Title.Text = title
+    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Title.TextSize = 16.000
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    
+    Description.Name = "Description"
+    Description.Parent = Frame
+    Description.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Description.BackgroundTransparency = 1.000
+    Description.BorderColor3 = Color3.fromRGB(27, 42, 53)
+    Description.Position = UDim2.new(0.0572519079, 0, 0.303030312, 0)
+    Description.Size = UDim2.new(0, 233, 0, 52)
+    Description.Font = Enum.Font.Gotham
+    Description.Text = description
+    Description.TextColor3 = Color3.fromRGB(234, 234, 234)
+    Description.TextSize = 14.000
+    Description.TextWrapped = true
+    Description.TextXAlignment = Enum.TextXAlignment.Left
+    Description.TextYAlignment = Enum.TextYAlignment.Top
+    
+    Dissmiss.Name = "Dissmiss"
+    Dissmiss.Parent = Frame
+    Dissmiss.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Dissmiss.BackgroundTransparency = 1.000
+    Dissmiss.BorderColor3 = Color3.fromRGB(27, 42, 53)
+    Dissmiss.Position = UDim2.new(0.0572519079, 0, 0.696969688, 0)
+    Dissmiss.Size = UDim2.new(0, 110, 0, 29)
+    Dissmiss.Font = Enum.Font.GothamMedium
+    Dissmiss.Text = "Dismiss"
+    Dissmiss.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Dissmiss.TextSize = 16.000
+    Dissmiss.TextTransparency = 0.250
+    
+    UIStroke_1.Parent = Dissmiss
+    UIStroke_1.Thickness = 1.3
+    UIStroke_1.Color = Color3.fromRGB(255, 255, 255)
+    UIStroke_1.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    
+    UIGradient_1.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(32, 16, 255)), ColorSequenceKeypoint.new(0.59, Color3.fromRGB(0, 0, 127)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(17, 43, 127))}
+    UIGradient_1.Parent = UIStroke_1
+    
+    UICorner_2.CornerRadius = UDim.new(0, 6)
+    UICorner_2.Parent = Dissmiss
+    
+    Continue.Name = "Continue"
+    Continue.Parent = Frame
+    Continue.BackgroundColor3 = Color3.fromRGB(21, 21, 21)
+    Continue.BorderColor3 = Color3.fromRGB(27, 42, 53)
+    Continue.Position = UDim2.new(0.526717544, 0, 0.696969688, 0)
+    Continue.Size = UDim2.new(0, 110, 0, 29)
+    Continue.Font = Enum.Font.GothamBold
+    Continue.Text = "Continue"
+    Continue.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Continue.TextSize = 16.000
+    Continue.TextStrokeColor3 = Color3.fromRGB(31, 33, 35)
+    
+    UIStroke_2.Parent = Continue
+    UIStroke_2.Thickness = 2
+    UIStroke_2.Color = Color3.fromRGB(255, 255, 255)
+    UIStroke_2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    
+    UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(32, 16, 255)), ColorSequenceKeypoint.new(0.59, Color3.fromRGB(0, 0, 127)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(17, 43, 127))}
+    UIGradient_2.Parent = UIStroke_2
+    
+    UICorner_3.CornerRadius = UDim.new(0, 6)
+    UICorner_3.Parent = Continue
+    
+    Timer.Parent = Frame
+    Timer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Timer.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Timer.BorderSizePixel = 0
+    Timer.Position = UDim2.new(0.0572519079, 0, 0.25757575, 0)
+    Timer.Size = UDim2.new(0, 241, 0, 1)
+    
+    UIGradient_3.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(32, 16, 255)), ColorSequenceKeypoint.new(0.59, Color3.fromRGB(0, 0, 127)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(17, 43, 127))}
+    UIGradient_3.Parent = Timer
+
+    Dissmiss.MouseButton1Click:Connect(function()
+        print("dismissed")   
+    end)
+
+    Continue.MouseButton1Down:Connect(function()
+        pcall(callback)
+    end)
 end
+
 
 return notif
